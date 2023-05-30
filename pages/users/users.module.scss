@@ -1,0 +1,26 @@
+.ListItems {
+    gap: 10px;
+    > h4 {
+        font-size: 22px;
+        font-weight: 600;
+        flex: 1;
+    }
+    button {
+        background-color: rgb(59 130 246);
+
+        span {
+            color: #fff;
+        }
+    }
+    button:hover {
+        background-color: #fff;
+        span {
+            color: rgb(59 130 246)
+        }
+    }
+}
+.modal {
+    button {
+        opacity: 1;
+    }
+}

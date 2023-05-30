@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useRouter } from "next/router";
 import Image from 'next/image';
 import { SolutionOutlined, MenuOutlined, ShoppingCartOutlined, TeamOutlined, GiftOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme, Anchor } from 'antd';
+import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import classNames from 'classnames/bind';
 import styles from './LayoutAdmin.module.scss';
-import Logo from '../assets/imgs/Logo.svg'
+import Logo from '../../assets/imgs/Logo.svg'
 import Link from 'next/link';
 
 const cx = classNames.bind(styles);
@@ -13,7 +13,7 @@ const cx = classNames.bind(styles);
 const { Header, Content, Footer, Sider } = Layout;
 
 
-function getItem(label, key, icon, children, href) {
+function getItem(label, key, icon, children) {
     const toLowerCase = (href) => href.toLowerCase();
     return {
         key,

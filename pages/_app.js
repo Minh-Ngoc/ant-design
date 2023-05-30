@@ -1,5 +1,5 @@
 import '@/styles/globals.css'
-import Layout from '@/components/LayoutAdmin'
+import Layout from '@/components/layout'
 
 export default function App({ Component, pageProps }) {
   const renderWithLayout = Component.getLayout || 
