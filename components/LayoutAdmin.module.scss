@@ -1,0 +1,25 @@
+.logo-vertical {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 10px;
+    
+    margin-bottom: 3rem;
+    .sidebar__logo-text {
+
+        h2 {
+            font-weight: 700;
+            font-size: 28px;
+            line-height: 36px;
+            font-feature-settings: 'salt' on;
+            color: #ffffff;
+        }
+        p {
+            font-weight: 700;
+            font-size: 10px;
+            line-height: 13px;
+            font-feature-settings: 'salt' on;
+            color: #ffffff;
+        }
+    }
+}
