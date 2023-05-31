@@ -12,7 +12,6 @@ const cx = classNames.bind(styles);
 
 const { Header, Content, Footer, Sider } = Layout;
 
-
 function getItem(label, key, icon, children) {
     const toLowerCase = (href) => href.toLowerCase();
     return {
@@ -46,9 +45,9 @@ const LayoutAdmin = ({ children }) => {
 
     return (
         <Layout
-        style={{
-            minHeight: '100vh',
-        }}
+            style={{
+                minHeight: '100vh',
+            }}
         >
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
                 <div className={cx('logo-vertical')}>
@@ -84,7 +83,6 @@ const LayoutAdmin = ({ children }) => {
                         }}
                     >
                         <Breadcrumb.Item> {path.toUpperCase()} </Breadcrumb.Item>
-                        {/* <Breadcrumb.Item>Bill</Breadcrumb.Item> */}
                     </Breadcrumb>
                 </Header>
                 <Content

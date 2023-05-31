@@ -24,3 +24,18 @@
         opacity: 1;
     }
 }
+
+.btn__edit {
+    background-color: red;
+
+    span {
+        color: #fff;
+    }
+}
+.btn__delete {
+    background-color: rgb(17, 0, 255);
+    
+    span {
+        color: #fff;
+    }
+}
