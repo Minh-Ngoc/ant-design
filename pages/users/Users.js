@@ -51,6 +51,7 @@ export default function Users() {
       dataIndex: 'edit',
       align: 'center',
       className: 'btn__edit',
+      width: 100,
       render: (text, row) => (<Space> <Button className={cx('btn__edit')} onClick={() => handleEdit(row.key)} type="link"> {text} </Button> </Space>),
     },
     {
@@ -58,6 +59,7 @@ export default function Users() {
       dataIndex: 'delete',
       align: 'center',
       className: 'btn__delete',
+      width: 100,
       render: (text, row) => (<Space> <Button className={cx('btn__delete')} onClick={() => handleDelete(row.key)} type="link"> {text} </Button> </Space>),
     },
 

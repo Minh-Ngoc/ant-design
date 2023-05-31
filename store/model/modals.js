@@ -5,16 +5,16 @@ export const modal = {
     }, // initial state
     reducers: {
       // handle state changes with pure functions
-      setIsOpenModalAdd(state, payload) {
+      setIsOpenModalAdd(state, isOpenModalAdd) {
         return {
             ...state,
-            payload
+            isOpenModalAdd
         }
       },
-      setIsOpenModalEdit(state, payload) {
+      setIsOpenModalEdit(state, isOpenModalEdit) {
         return {
             ...state,
-            payload
+            isOpenModalEdit
         }
       },
     },

@@ -1,22 +1,24 @@
 export const products = {
     state: {
-        products: [],
+        productsList: [],
     }, // initial state
     reducers: {
       // handle state changes with pure functions
-      setProducts(state, payload) {
+      setProductsList(state, productsList) {
         return {
             ...state,
-            payload
+            productsList
         }
       },
+
     },
     effects: (dispatch) => ({
       // handle state changes with impure functions.
       // use async/await for async actions
-      async incrementAsync(payload, rootState) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        dispatch.count.increment(payload);
+      async fetchProducts(payload, rootState) {
+        const data = await fetch('https://dummyjson.com/products')
+            .then(res => res.json())
+            this.setProductsList(data.products);
       },
     }),
     selectors: (slice, createSelector) => ({
