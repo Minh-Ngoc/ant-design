@@ -12,28 +12,26 @@ const cx = classNames.bind(styles);
 export default function Products() {
   const columns = [
     {
-      title: 'Tên sản phẩm',
+      title: 'Tiêu đề',
       dataIndex: 'title',
     },
     {
-      title: 'Giá',
-      dataIndex: 'price',
-    },
-    {
-      title: 'Loại sản phẩm',
-      dataIndex: 'category',
-    },
-    {
-      title: 'Thương hiệu',
-      dataIndex: 'brand',
-    },
-    {
-      title: 'Edit',
-      dataIndex: 'edit',
+      title: '%',
+      dataIndex: 'percent',
       align: 'center',
-      width: 100,
-      render: (text, row) => (<Space> <Button className={cx('btn__edit')} onClick={() => handleEdit(row.id)} type="link"> {text} </Button> </Space>),
     },
+    {
+      title: 'Mã giảm giá',
+      dataIndex: 'codeCoupon',
+      align: 'center',
+    },
+    // {
+    //   title: 'Edit',
+    //   dataIndex: 'edit',
+    //   align: 'center',
+    //   width: 100,
+    //   render: (text, row) => (<Space> <Button className={cx('btn__edit')} onClick={() => handleEdit(row.id)} type="link"> {text} </Button> </Space>),
+    // },
     {
       title: 'Delete',
       dataIndex: 'delete',
@@ -51,7 +49,7 @@ export default function Products() {
   
   const dispatch = useDispatch();
 
-  const productsStore = useSelector((state) => state.products);
+  const couponsStore = useSelector((state) => state.coupons);
   const modalStore = useSelector((state) => state.modal);
   
   const showModalAdd = () => {
@@ -73,61 +71,58 @@ export default function Products() {
   };
 
   useEffect(() => {
-    dispatch.products.fetchProducts();
-    // dispatch.products.setProductsList()
+    dispatch.coupons.fetchCoupons();
   }, [])
 
   const attbute = {
-    edit: <EditOutlined />,
+    // edit: <EditOutlined />,
     delete: <DeleteOutlined />
   }
-  productsStore.productsList && 
-  productsStore.productsList.map(item => 
+  couponsStore.couponsList && 
+  couponsStore.couponsList.map(item => 
     Object.assign(item,attbute)
   )
 
   const handleSubmitAdd = (values) => {
-    if (!values.title || !values.price || !values.category || !values.brand) {
+    if (!values.title || !values.percent || !values.codeCoupon) {
       return;
     } else {
-      dispatch.products.setProductsList([...productsStore.productsList, {
-        key: Math.floor(Math.random() * 10000) + 1,
+      dispatch.coupons.setCouponsList([...couponsStore.couponsList, {
+        id: Math.floor(Math.random() * 10000) + 1,
         title: values.title,
-        price: values.price,
-        category: values.category,
-        brand: values.brand,
-      }])
-
-      dispatch.modal.setIsOpenModalAdd(false);
+        percent: values.percent,
+        codeCoupon: values.codeCoupon,
+      }]);
     }
+    dispatch.modal.setIsOpenModalAdd(false);
     return;
   }
 
   const handleDelete = (id) => {
-    const arr = productsStore.productsList.filter((item) => item.id !== id)
-    dispatch.products.setProductsList([...arr])
+    const arr = couponsStore.couponsList.filter((item) => item.id !== id)
+    dispatch.coupons.setCouponsList([...arr])
   }
-  const handleEdit = (id) => {
-    dispatch.modal.setIsOpenModalEdit(true)
-    setSelectedItem(productsStore.productsList.find(item => item.id === id))
-  }
+  // const handleEdit = (id) => {
+  //   dispatch.modal.setIsOpenModalEdit(true)
+  //   setSelectedItem(productsStore.productsList.find(item => item.id === id))
+  // }
 
-  const handleSubmitEdit = () => {
-    dispatch.products.setProductsList(  
-      productsStore.productsList.map(product => 
-        product.id === selectedItem.id ? selectedItem : product
-      )
-    )
-    dispatch.modal.setIsOpenModalEdit(false)
-    console.log('productsStore',productsStore.productsList)
-  }
+  // const handleSubmitEdit = () => {
+  //   dispatch.products.setProductsList(  
+  //     productsStore.productsList.map(product => 
+  //       product.id === selectedItem.id ? selectedItem : product
+  //     )
+  //   )
+  //   dispatch.modal.setIsOpenModalEdit(false)
+  //   console.log('productsStore',productsStore.productsList)
+  // }
 
   return (
     <main>
       <Wrapper className={cx('ListItems')}>
-        <h4>Danh sách Product</h4>
+        <h4>Danh sách Coupons</h4>
         <Button onClick={showModalAdd} size='large'>
-          Add new Product
+          Add new coupon
         </Button>
         <Space direction="vertical">
           <Search
@@ -149,7 +144,7 @@ export default function Products() {
             ...rowSelection,
           }}
           columns={columns}
-          dataSource={productsStore.productsList}
+          dataSource={couponsStore.couponsList}
         />
       </div>
 
@@ -158,7 +153,7 @@ export default function Products() {
       <Modal
         className={cx('modal')}
         width={800}
-        title="Add product"
+        title="Add coupon"
         open={modalStore.isOpenModalAdd}
         onOk={() => form.submit()}
         okText='Submit'
@@ -173,7 +168,7 @@ export default function Products() {
           autoComplete="off"
         >
           <Form.Item
-            label="Tên sản phẩm:"
+            label="Tiêu đề:"
             name="title"
             rules={[
               {
@@ -185,8 +180,8 @@ export default function Products() {
           </Form.Item>
 
           <Form.Item
-            label="Giá:"
-            name="price"
+            label="Tỷ lệ % giảm giá:"
+            name="percent"
             rules={[
               {
                 required: true,
@@ -197,20 +192,8 @@ export default function Products() {
           </Form.Item>
 
           <Form.Item
-            label="Loại sản phẩm:"
-            name="category"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Thương hiệu:"
-            name="brand"
+            label="Mã giảm giá:"
+            name="codeCoupon"
             rules={[
               {
                 required: true,
@@ -223,7 +206,7 @@ export default function Products() {
       </Modal>
 
 {/* ----------------------Modal Edit------------------- */}
-      <Modal
+      {/* <Modal
         className={cx('modal')}
         width={800}
         title="Edit user"
@@ -272,7 +255,7 @@ export default function Products() {
           />
         </Form.Item>
 
-      </Modal>
+      </Modal> */}
     </main>
   )
 }
