@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import styles from '@/styles/styleForm.module.scss';
 import { useEffect, useState } from "react";
 import { CheckOutlined } from '@ant-design/icons';
+import Wrapper from '../../components/Wrapper';
 
 const cx = classNames.bind(styles);
 
@@ -92,6 +93,9 @@ export default function Orders() {
       <Head>
         <title>Orders page</title>
       </Head>
+      <Wrapper className={cx('ListItems')}>
+        <h4>Danh sách Orders</h4>
+      </Wrapper>
       <div>
         <Divider />
         <Table
