@@ -26,8 +26,8 @@ const items = [
     getItem('Users', '1', <SolutionOutlined />),
     getItem('Customers', '2', <TeamOutlined />),
     getItem('Products', '3', <MenuOutlined />),
-    getItem('Orders', '4', <ShoppingCartOutlined />),
     getItem('Coupons', '5', <GiftOutlined />),
+    getItem('Orders', '4', <ShoppingCartOutlined />),
 ];
 
 const LayoutAdmin = ({ children }) => {

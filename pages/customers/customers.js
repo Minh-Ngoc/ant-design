@@ -93,7 +93,7 @@ const Customers = () => {
             },
           ]}
         >
-          <Button style={{background: '#1677ff', color: '#fff'}}>Export users</Button>
+          <Button style={{background: '#1677ff', color: '#fff'}}>Export all customer</Button>
         </Excel>
       </header>
       <div>

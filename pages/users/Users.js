@@ -59,13 +59,14 @@ export default function Users() {
 
   const usersStore = useSelector((state) => state.users);
   const modalStore = useSelector((state) => state.modal);
+  const [dataSearch, setDataSearch] = useState([]);
   
   const showModalAdd = () => {
     dispatch.modal.setIsOpenModalAdd(true);
     return;
   };
 
-  const onSearch = (value) => console.log(...value);
+  const onSearch = (value) => console.log(value);
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
