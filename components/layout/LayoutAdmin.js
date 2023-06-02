@@ -50,7 +50,7 @@ const LayoutAdmin = ({ children }) => {
             }}
         >
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                <div className={cx('logo-vertical')}>
+                <Link href='/' className={cx('logo-vertical')}>
                     <Image
                         src={Logo}
                         width='100%'
@@ -60,7 +60,7 @@ const LayoutAdmin = ({ children }) => {
                         <h2>MyNFT</h2>
                         <p>NFT Marketplace</p>
                     </div>
-                </div>
+                </Link>
                 <Menu 
                     onClick={onClick}
                     theme="dark" 
@@ -82,7 +82,7 @@ const LayoutAdmin = ({ children }) => {
                             fontSize: '20px'
                         }}
                     >
-                        <Breadcrumb.Item> {path.toUpperCase()} </Breadcrumb.Item>
+                        <Breadcrumb.Item> {path.toUpperCase() ? path.toUpperCase() : 'HOME'} </Breadcrumb.Item>
                     </Breadcrumb>
                 </Header>
                 <Content

@@ -3,43 +3,25 @@ import { Input, Space, Button, Modal, Form, Divider, Table } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import classNames from 'classnames/bind';
 import styles from '@/styles/styleForm.module.scss';
-import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react';
+import Head from 'next/head';
 
 const cx = classNames.bind(styles);
 
-const data = [
-  {
-    key: '1',
-    name: 'Ngọc Minh',
-    username: 'ngocminh',
-    password: '123456',
-    edit: <EditOutlined />,
-    delete: <DeleteOutlined />
-  },
-  {
-    key: '2',
-    name: 'KITS',
-    username: 'kits',
-    password: '123456',
-    edit: <EditOutlined />,
-    delete: <DeleteOutlined />
-  },
-];
 
 export default function Users() {
-  const { Search } = Input;
-  const [form] = Form.useForm();
-  const [isModalOpen, setIsModalOpen] = useState({ add: false, edit: false });
-  const [dataTable, setDataTable] = useState([...data]);
-  const [selectedItem, setSelectedItem] = useState(false);
-
   const columns = [
     {
-      title: 'Họ và tên',
-      dataIndex: 'name',
+      title: 'First Name',
+      dataIndex: 'firstName',
     },
     {
-      title: 'Tên đăng nhập',
+      title: 'Last Name',
+      dataIndex: 'lastName',
+    },
+    {
+      title: 'Username',
       dataIndex: 'username',
     },
     {
@@ -47,12 +29,16 @@ export default function Users() {
       dataIndex: 'password',
     },
     {
+      title: 'Email',
+      dataIndex: 'email',
+    },
+    {
       title: 'Edit',
       dataIndex: 'edit',
       align: 'center',
       className: 'btn__edit',
       width: 100,
-      render: (text, row) => (<Space> <Button className={cx('btn__edit')} onClick={() => handleEdit(row.key)} type="link"> {text} </Button> </Space>),
+      render: (text, row) => (<Space> <Button className={cx('btn__edit')} onClick={() => handleEdit(row.id)} type="link"> {text} </Button> </Space>),
     },
     {
       title: 'Delete',
@@ -60,20 +46,26 @@ export default function Users() {
       align: 'center',
       className: 'btn__delete',
       width: 100,
-      render: (text, row) => (<Space> <Button className={cx('btn__delete')} onClick={() => handleDelete(row.key)} type="link"> {text} </Button> </Space>),
+      render: (text, row) => (<Space> <Button className={cx('btn__delete')} onClick={() => handleDelete(row.id)} type="link"> {text} </Button> </Space>),
     },
-
   ];
 
-  const handleEdit = (key) => {
-    setIsModalOpen({edit: true})
-    setSelectedItem(dataTable.find(item => item.key === key))
-  }
-  const handleDelete = (key) => {
-    console.log(key, data);
-    const arr = dataTable.filter((item) => item.key !== key)
-    setDataTable([...arr])
-  }
+  const [selectedItem, setSelectedItem] = useState(false);
+
+  const [form] = Form.useForm();
+  const { Search } = Input;
+  
+  const dispatch = useDispatch();
+
+  const usersStore = useSelector((state) => state.users);
+  const modalStore = useSelector((state) => state.modal);
+  
+  const showModalAdd = () => {
+    dispatch.modal.setIsOpenModalAdd(true);
+    return;
+  };
+
+  const onSearch = (value) => console.log(...value);
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
@@ -85,65 +77,65 @@ export default function Users() {
       name: record.name,
     }),
   };
-  
-  const onSearch = (value) => console.log(...value);
 
-  // Show Modal
-  const showModalAdd = () => {
-    setIsModalOpen({add: true});
-  };
+  useEffect(() => {
+    dispatch.users.fetchUsers();
+  }, [])
 
-  // HandleOk
-  const handleOkAdd = () => {
-    form.submit();
-  };
-  // const handleOkEdit = () => {
-  //   form.submit();
-  // };
+  const attbute = {
+    edit: <EditOutlined />,
+    delete: <DeleteOutlined />
+  }
+  usersStore.usersList && 
+  usersStore.usersList.map(item => 
+    Object.assign(item,attbute)
+  )
 
-  // HandleCancel
-  const handleCancelAdd = () => {
-    setIsModalOpen({add: false});
-  };
-
-  const handleCancelEdit = () => {
-    setIsModalOpen({edit: false});
-  };
-
-  // HandleSubmit
   const handleSubmitAdd = (values) => {
-    console.log(values)
-    if (!values.name || !values.username || !values.password) {
+    if (!values.firstName || !values.lastName || !values.username || !values.password || !values.email) {
       return;
     } else {
-      data.push({
-        key: Math.floor(Math.random() * 10000) + 1,
-        name: values.name,
+      dispatch.users.setUsersList([...usersStore.usersList, {
+        id: Math.floor(Math.random() * 10000) + 1,
+        firstName: values.firstName,
+        lastName: values.lastName,
         username: values.username,
         password: values.password,
+        email: values.email,
         edit: <EditOutlined />,
         delete: <DeleteOutlined />
-      })
-      setDataTable([...data])
-      setIsModalOpen(false);
+      }])
+
+      dispatch.modal.setIsOpenModalAdd(false);
     }
+    return;
   }
 
-  const handleSubmitEdit = (values) => {
-    setDataTable((pre) => {
-      return pre.map((item) => {
-        if (item.key === selectedItem.key) {
-          return selectedItem;
-        } else {
-          return item;
-        }
-      });
-    });
-      setIsModalOpen(false);
+  const handleDelete = (id) => {
+    console.log(id)
+    const arr = usersStore.usersList.filter((item) => item.id !== id)
+    dispatch.users.setUsersList([...arr])
+  }
+  const handleEdit = (id) => {
+    dispatch.modal.setIsOpenModalEdit(true)
+    setSelectedItem(usersStore.usersList.find(item => item.id === id))
+  }
+
+  const handleSubmitEdit = () => {
+    dispatch.users.setUsersList(  
+      usersStore.usersList.map(product => 
+        product.id === selectedItem.id ? selectedItem : product
+      )
+    )
+    dispatch.modal.setIsOpenModalEdit(false)
+    console.log('usersStore',usersStore.usersList)
   }
 
   return (
     <main>
+      <Head>
+        <title>Users page</title>
+      </Head>
       <Wrapper className={cx('ListItems')}>
         <h4>Danh sách User</h4>
         <Button onClick={showModalAdd} size='large'>
@@ -169,20 +161,21 @@ export default function Users() {
             ...rowSelection,
           }}
           columns={columns}
-          dataSource={dataTable}
+          dataSource={usersStore.usersList}
         />
       </div>
 
-          {/* ---------Modal Add USer-------- */}
+{/* ----------------------Modal Add------------------- */}
+
       <Modal
         className={cx('modal')}
         width={800}
-        title="Add user"
-        open={isModalOpen.add}
-        onOk={handleOkAdd}
+        title="Add product"
+        open={modalStore.isOpenModalAdd}
+        onOk={() => form.submit()}
         okText='Submit'
         okType='default'
-        onCancel={handleCancelAdd}
+        onCancel={() => dispatch.modal.setIsOpenModalAdd(false)}
       >
         <Form
           form={form}
@@ -192,8 +185,8 @@ export default function Users() {
           autoComplete="off"
         >
           <Form.Item
-            label="Họ và tên:"
-            name="name"
+            label="First Name:"
+            name="firstName"
             rules={[
               {
                 required: true,
@@ -203,7 +196,18 @@ export default function Users() {
             <Input />
           </Form.Item>
           <Form.Item
-            label="Tên đăng nhập:"
+            label="Last Name:"
+            name="lastName"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Username:"
             name="username"
             rules={[
               {
@@ -224,34 +228,55 @@ export default function Users() {
           >
             <Input />
           </Form.Item>
+          <Form.Item
+            label="Email:"
+            name="email"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
         </Form>
       </Modal>
 
-          {/* ---------Modal Edit USer-------- */}
-
+{/* ----------------------Modal Edit------------------- */}
       <Modal
         className={cx('modal')}
         width={800}
         title="Edit user"
-        open={isModalOpen.edit}
+        open={modalStore.isOpenModalEdit}
         onOk={handleSubmitEdit}
         okText='Submit'
         okType='default'
-        onCancel={handleCancelEdit}
+        onCancel={() => dispatch.modal.setIsOpenModalEdit(false)}
       >
         <Form.Item>
-          <label className="floating-label">Họ và tên:</label>
+           <label className="floating-label">First Name:</label>
           <Input
-            value={selectedItem?.name}
+            value={selectedItem?.firstName}
             onChange={(e) => {
               setSelectedItem((pre) => {
-                return { ...pre, name: e.target.value };
+                return { ...pre, firstName: e.target.value };
               });
             }}
           />
         </Form.Item>
         <Form.Item>
-          <label className="floating-label">Tên đăng nhập:</label>
+          <label className="floating-label">Last Name:</label>
+          <Input
+            value={selectedItem?.lastName}
+            onChange={(e) => {
+              setSelectedItem((pre) => {
+                return { ...pre, lastName: e.target.value };
+              });
+            }}
+          />
+        </Form.Item>
+        <Form.Item>
+          <label className="floating-label">Username:</label>
           <Input
             value={selectedItem?.username}
             onChange={(e) => {
@@ -263,7 +288,7 @@ export default function Users() {
         </Form.Item>
 
         <Form.Item>
-          <label className="floating-label">Mật khẩu:</label>
+          <label className="floating-label">Password:</label>
           <Input
             value={selectedItem?.password}
             onChange={(e) => {
@@ -273,9 +298,19 @@ export default function Users() {
             }}
           />
         </Form.Item>
+        <Form.Item>
+          <label className="floating-label">Email:</label>
+          <Input
+            value={selectedItem?.email}
+            onChange={(e) => {
+              setSelectedItem((pre) => {
+                return { ...pre, email: e.target.value };
+              });
+            }}
+          />
+        </Form.Item>
 
       </Modal>
-
     </main>
   )
 }

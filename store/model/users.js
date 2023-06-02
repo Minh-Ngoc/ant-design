@@ -4,7 +4,7 @@ export const users = {
     }, // initial state
     reducers: {
       // handle state changes with pure functions
-      setusersList(state, usersList) {
+      setUsersList(state, usersList) {
         return {
             ...state,
             usersList
@@ -18,7 +18,7 @@ export const users = {
       async fetchUsers(payload, rootState) {
         const data = await fetch('https://dummyjson.com/users')
             .then(res => res.json())
-            this.setusersList(data.users);
+            this.setUsersList(data.users);
       },
     }),
     selectors: (slice, createSelector) => ({

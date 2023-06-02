@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
 import {
   LineChart,
   BarChart,
   Bar,
-  Legend, Tooltip,
+  Legend, 
+  Tooltip,
   Line,
   XAxis,
   YAxis,
-  CartesianGrid
+  CartesianGrid,
+  RadialBarChart, 
+  RadialBar,
+  ReferenceLine,
 } from 'recharts';
 import classNames from 'classnames/bind';
 import styles from './index.module.scss';
@@ -16,6 +21,10 @@ import Wrapper from '@/components/Wrapper';
 const cx = classNames.bind(styles);
 
 const Home = () => {
+  const [lineData, setLineData] = useState([])
+  const [barData, setBarData] = useState([])
+  const [radialData, setRadialData] = useState([])
+
   const lineChartData = [
     {
         time: '12:00',
@@ -66,48 +75,80 @@ const Home = () => {
         pv: 40,
     },
   ];
-  const barchartData = [
+  
+  const barChartData = [
     {
-      date: '06 March',
-      money: 1300
+      name: '06 March',
+      uv: 3500,
     },
     {
-      date: '07 March',
-      money: -1500
+      name: '07 March',
+      uv: -3000,
     },
     {
-      date: '08 March',
-      money: 2500
+      name: '08 March',
+      uv: -2000,
     },
     {
-      date: '09 March',
-      money: -500
+      name: '09 March',
+      uv: 2780,
     },
     {
-      date: '10 March',
-      money: -250
+      name: '10 March',
+      uv: -1890,
     },
     {
-      date: '10 March',
-      money: 250
+      name: '11 March',
+      uv: 2390,
     },
     {
-      date: '10 March',
-      money: 1200
+      name: '12 March',
+      uv: 3490,
     },
   ];
+  const radialChartData = [
+    { name:'Bank', x: 75, fill:"#F3BA2F" },
+    { name:'Token', x: 56, fill:" #54C2C1" },
+    { name:'Cash', x: 40, fill:"#000000" },
+    { name:'Stock', x: 25, fill:"#9020E9" },
+  ];
+
+  useEffect(() => {
+    setLineData(lineChartData);
+    setBarData(barChartData.map(item => 
+      Object.assign(item, { fill: item.uv > 0 ? '#4FB5C9' : '#F05D5E' })
+    ));
+    setRadialData(radialChartData);
+  }, [])
   const HiddenDot = () => (
     <circle cx={0} cy={0} r={0} fill="transparent" stroke="none" />
   );
+  const style = {
+    top: '50%',
+    right: 0,
+    transform: 'translate(0, -50%)',
+    lineHeight: '24px',
+  };
+
+  const ContentLegend = (values, entry) =>  (
+    <>
+      <span className={cx('title')}> {values}: </span>
+      <span className={cx('value')}> ${entry.payload.x} </span>
+    </>
+  )
+
   return (
    <main>
+      <Head>
+        <title>Home page</title>
+      </Head>
       <Wrapper className={cx('chart')}>
         <h1>Token Price</h1>
         <div className={cx('line__chart')}>
           <LineChart
             width={1400}
             height={400}
-            data={lineChartData}
+            data={lineData}
           >
             <CartesianGrid strokeWidth={1} vertical={false} stroke="#DEDEE7" />
             <XAxis axisLine={false} dataKey="time" tick={{ fill: "#A4A4B2" }} tickLine={false} />
@@ -123,30 +164,71 @@ const Home = () => {
                 type="monotone"
                 dataKey="pv"
                 stroke="url(#gradient)"
-                strokeWidth={2}
+                strokeWidth={4}
                 dot={<HiddenDot />}
             />
           </LineChart>
         </div >
       </Wrapper>
 
-      <Wrapper className={cx('chart')}>
-        <h1>Money Allocation</h1>
-        <div className={cx('line__chart')}>
-        <BarChart
-          width={730}
-          height={250}
-          data={barchartData}
-          margin={{ top: 15, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Bar dataKey="date" fill="#8884d8" />
-          <Bar dataKey="money" fill="#82ca9d" />
-        </BarChart>
-        </div >
-      </Wrapper>
+      <div className={cx('chart__group')}>
+        <Wrapper className={cx('chart')}>
+          <h1>Profit</h1>
+          <div className={cx('line__chart')}>
+            <BarChart
+              width={800}
+              height={500}
+              data={barData}
+              stackOffset="sign"
+              syncMethod={(e) => console.log(e)}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <ReferenceLine y={0} stroke="#000" />
+              <Bar dataKey="uv" radius={ [10, 10, 0, 0] } fill="#8884d8" stackId="stack" />
+            </BarChart>
+          </div >
+        </Wrapper>
+
+        <Wrapper className={cx('chart')}>
+          <h1>Money Allocation</h1>
+          <div className={cx('line__chart')}>
+          <RadialBarChart
+            width={500}
+            height={300}
+            cx={150}
+            cy={150}
+            innerRadius={20}
+            outerRadius={140}
+            barSize={10}
+            data={radialData}
+          >
+            <RadialBar
+              label={{ position: "insideStart", fill: "#fff" }}
+              background
+              dataKey="x"
+            />
+            <Legend
+              iconSize={10}
+              width={160}
+              height={180}
+              layout="vertical"
+              verticalAlign="middle"
+              wrapperStyle={style}
+              formatter={ContentLegend}
+            />
+          </RadialBarChart>
+          </div >
+        </Wrapper>
+      </div>
    </main>
   );
 };

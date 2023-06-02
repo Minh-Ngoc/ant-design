@@ -5,6 +5,7 @@ import classNames from 'classnames/bind';
 import styles from '@/styles/styleForm.module.scss';
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react';
+import Head from 'next/head';
 
 const cx = classNames.bind(styles);
 
@@ -119,6 +120,9 @@ export default function Products() {
 
   return (
     <main>
+      <Head>
+        <title>Coupons page</title>
+      </Head>
       <Wrapper className={cx('ListItems')}>
         <h4>Danh sách Coupons</h4>
         <Button onClick={showModalAdd} size='large'>

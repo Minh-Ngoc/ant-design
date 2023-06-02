@@ -5,6 +5,8 @@ import classNames from 'classnames/bind';
 import styles from '@/styles/styleForm.module.scss';
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import Head from 'next/head';
 
 const cx = classNames.bind(styles);
 
@@ -18,6 +20,11 @@ export default function Products() {
     {
       title: 'Giá',
       dataIndex: 'price',
+    },
+    {
+      title: 'Hình ảnh',
+      dataIndex: 'thumbnail',
+      render: (text) => <Image width={120} height={60} src={text ? text : 'https://cdn.questionpro.com/userimages/site_media/no-image.png'} alt='ErrorImage' />
     },
     {
       title: 'Loại sản phẩm',
@@ -91,7 +98,7 @@ export default function Products() {
       return;
     } else {
       dispatch.products.setProductsList([...productsStore.productsList, {
-        key: Math.floor(Math.random() * 10000) + 1,
+        id: Math.floor(Math.random() * 10000) + 1,
         title: values.title,
         price: values.price,
         category: values.category,
@@ -124,6 +131,9 @@ export default function Products() {
 
   return (
     <main>
+      <Head>
+        <title>Products page</title>
+      </Head>
       <Wrapper className={cx('ListItems')}>
         <h4>Danh sách Product</h4>
         <Button onClick={showModalAdd} size='large'>

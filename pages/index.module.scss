@@ -1,3 +1,4 @@
+
 .chart {
     flex-direction: column;
     align-items: flex-start;
@@ -7,8 +8,36 @@
         font-weight: 700;
         margin-left: 2rem;
         color: #4A4A65;
+        line-height: 4rem;
+    }
+
+    + .chart {
+        margin-top: 2rem;
     }
 }
+
+.chart__group {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-right: 2rem;
+}
+
+
 .line__chart {
     margin: 2rem 0;
+}
+
+.title {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    color: #5F5F76;
+    line-height: 40px;
+}
+.value {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    color: #0F0F3F;
 }
