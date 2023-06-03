@@ -3,12 +3,15 @@ import { Divider, Table, Space, Button } from 'antd';
 import classNames from 'classnames/bind';
 import styles from '@/styles/styleForm.module.scss';
 import { useEffect, useState } from "react";
-import { CheckOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import Wrapper from '../../components/Wrapper';
 
 const cx = classNames.bind(styles);
 
 export default function Orders() {
+  const [ordersList, setOrdersList] = useState([]);
+  const [styleBtnEdit, setStyleBtnEdit] = useState(false);
+
   const columns = [
     {
       title: 'Họ và tên',
@@ -39,7 +42,7 @@ export default function Orders() {
       dataIndex: 'edit',
       align: 'center',
       width: 100,
-      render: (text, row) => (<Space> <Button className={cx('btn__delete')} onClick={() => handleAction(row.id)} type="link"> {text} </Button> </Space>),
+      render: (text, row) => (<Space> <Button className={cx(row.status === 'Chưa xác nhận' ? 'btn__delete' : 'btn__edit')} onClick={() => handleAction(row.id)} type="link"> {text} </Button> </Space>),
     },
   ]
   const data = [
@@ -75,17 +78,22 @@ export default function Orders() {
     },
   ]
 
-  const [ordersList, setOrdersList] = useState([]);
 
   useEffect(() => {
     setOrdersList(data);
   }, [])
 
   const handleAction = (id) => {
-    // console.log(ordersList[id-1].status)
-    data[id-1].status = 'Đã xác nhận';
-    setOrdersList([...data])
-    return;
+    const newState = ordersList.map(item => {
+      if (item.id === id && item.status === 'Chưa xác nhận') {
+        return {...item, status: 'Đã xác nhận', edit: <CloseOutlined />};
+      } else if(item.id === id && item.status === 'Đã xác nhận'){
+        return {...item, status: 'Chưa xác nhận', edit: <CheckOutlined />};
+      }
+      return item;
+    });
+
+    setOrdersList(newState);
   }
 
   return (
