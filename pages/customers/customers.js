@@ -51,7 +51,7 @@ const Customers = () => {
         <title>Customers page</title>
       </Head>
       <header>
-        <h1 style={{fontSize: '22px', fontWeight: 600, lineHeight: '80px'}}>Danh sách khách hàng</h1>
+        <h1 style={{fontSize: '22px', fontWeight: 600, lineHeight: '50px'}}>Danh sách khách hàng</h1>
         <Excel
           fileName="export-user"
           data={[
