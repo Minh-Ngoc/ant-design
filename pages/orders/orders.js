@@ -28,6 +28,7 @@ export default function Orders() {
     {
       title: 'Trạng thái',
       dataIndex: 'status',
+      width: 200,
     },
     {
       title: 'Thành tiền',
