@@ -124,10 +124,11 @@ const Home = () => {
     <circle cx={0} cy={0} r={0} fill="transparent" stroke="none" />
   );
   const style = {
-    top: '50%',
-    right: 0,
-    transform: 'translate(0, -50%)',
-    lineHeight: '24px',
+    position: 'inherit',
+    width: 'max-content',
+    height: 'max-content',
+    top: '10px',
+    left: '40px',
   };
 
   const ContentLegend = (values, entry) =>  (
