@@ -2,6 +2,7 @@
 .chart {
     flex-direction: column;
     align-items: flex-start;
+    flex: 1;
 
     > h1 {
         font-size: 30px;
@@ -9,17 +10,12 @@
         color: #4A4A65;
         line-height: 4rem;
     }
-
-    + .chart {
-        margin-top: 2rem;
-    }
 }
 
 .chart__group {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    padding-right: 2rem;
 }
 
 
