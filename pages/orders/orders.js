@@ -3,14 +3,13 @@ import { Divider, Table, Space, Button } from 'antd';
 import classNames from 'classnames/bind';
 import styles from '@/styles/styleForm.module.scss';
 import { useEffect, useState } from "react";
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import Wrapper from '../../components/Wrapper';
 
 const cx = classNames.bind(styles);
 
 export default function Orders() {
   const [ordersList, setOrdersList] = useState([]);
-  const [styleBtnEdit, setStyleBtnEdit] = useState(false);
 
   const columns = [
     {
@@ -28,7 +27,7 @@ export default function Orders() {
     {
       title: 'Trạng thái',
       dataIndex: 'status',
-      width: 200,
+      width: 200
     },
     {
       title: 'Thành tiền',
@@ -89,7 +88,7 @@ export default function Orders() {
       if (item.id === id && item.status === 'Chưa xác nhận') {
         return {...item, status: 'Đã xác nhận', edit: <CloseOutlined />};
       } else if(item.id === id && item.status === 'Đã xác nhận'){
-        return {...item, status: 'Chưa xác nhận', edit: <CheckOutlined />};
+        return {...item, status: 'Hủy xác nhận', edit: <MinusCircleOutlined />};
       }
       return item;
     });
