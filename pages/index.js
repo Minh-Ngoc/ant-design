@@ -146,7 +146,7 @@ const Home = () => {
         <h1>Token Price</h1>
         <div className={cx('line__chart')}>
           <LineChart
-            width={1400}
+            width={1000}
             height={400}
             data={lineData}
           >
@@ -176,7 +176,7 @@ const Home = () => {
           <h1>Profit</h1>
           <div className={cx('line__chart')}>
             <BarChart
-              width={800}
+              width={600}
               height={500}
               data={barData}
               stackOffset="sign"
