@@ -92,7 +92,7 @@ const LayoutAdmin = ({ children }) => {
                 >
                 <div
                     style={{
-                        padding: 24,
+                        padding: '0 24px 24px 24px',
                         minHeight: 360,
                         background: colorBgContainer,
                     }}
