@@ -203,7 +203,7 @@ const Home = () => {
           <h1>Money Allocation</h1>
           <div className={cx('line__chart')}>
           <RadialBarChart
-            width={500}
+            width={400}
             height={300}
             cx={150}
             cy={150}
